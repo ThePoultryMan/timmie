@@ -3,13 +3,18 @@ use serenity::framework::standard::CommandResult;
 use std::env;
 
 use serenity::async_trait;
-use serenity::framework::standard::{StandardFramework, macros::{command, group}};
+use serenity::framework::standard::{
+    macros::{command, group},
+    StandardFramework,
+};
 use serenity::model::channel::Message;
 use serenity::prelude::*;
 
 use commands::*;
 
 mod commands;
+mod embed_helper;
+mod helper;
 
 struct Handler;
 
