@@ -1,60 +1,48 @@
 use dotenv::dotenv;
-use serenity::framework::standard::CommandResult;
+
 use std::env;
 
-use serenity::async_trait;
-use serenity::framework::standard::{
-    macros::{command, group},
-    StandardFramework,
-};
-use serenity::model::channel::Message;
-use serenity::prelude::*;
+use poise::serenity_prelude as serenity;
 
 use commands::*;
 
 mod commands;
 mod embed_helper;
-mod helper;
 
-struct Handler;
-
-#[group]
-#[commands(ping)]
-#[sub_groups(Resin)]
-struct General;
-
-#[group]
-#[commands(exp_wit)]
-#[prefix("resin")]
-struct Resin;
-
-#[async_trait]
-impl EventHandler for Handler {}
+type Error = Box<dyn std::error::Error + Send + Sync>;
+type Context<'a> = poise::Context<'a, Data, Error>;
+pub struct Data {}
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
 
-    let framework = StandardFramework::new()
-        .configure(|c| c.prefix("?"))
-        .group(&GENERAL_GROUP);
+    let framework = poise::Framework::builder()
+        .options(poise::FrameworkOptions {
+            commands: vec![register(), ping(), resin::resin()],
+            prefix_options: poise::PrefixFrameworkOptions {
+                prefix: Some("?".to_owned()),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
+        .token(env::var("BOT_TOKEN").expect("Expected a bot token in the .env file."))
+        .intents(
+            serenity::GatewayIntents::non_privileged() | serenity::GatewayIntents::MESSAGE_CONTENT,
+        )
+        .user_data_setup(move |_ctx, _ready, _framework| Box::pin(async move { Ok(Data {}) }));
 
-    let token = env::var("BOT_TOKEN").expect("Expected a bot token in the .env file.");
-    let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
-    let mut client = Client::builder(&token, intents)
-        .event_handler(Handler)
-        .framework(framework)
-        .await
-        .expect("error creating client");
-
-    if let Err(err) = client.start().await {
-        println!("An error occured while running the client {:?}", err);
-    }
+    framework.run().await.unwrap();
 }
 
-#[command]
-async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
-    msg.reply(ctx, "Pong!").await?;
+#[poise::command(prefix_command)]
+async fn register(ctx: Context<'_>) -> Result<(), Error> {
+    poise::builtins::register_application_commands_buttons(ctx).await?;
+    Ok(())
+}
 
+#[poise::command(slash_command, prefix_command)]
+async fn ping(ctx: Context<'_>) -> Result<(), Error> {
+    ctx.say("ping!").await?;
     Ok(())
 }

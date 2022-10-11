@@ -1,3 +1,3 @@
-pub mod resin;
-
 pub use resin::*;
+
+pub mod resin;
