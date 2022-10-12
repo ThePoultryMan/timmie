@@ -15,13 +15,13 @@ pub async fn exp_wit(
     mut average: Option<bool>,
 ) -> Result<(), Error> {
     average.unwrap_or(false);
-    let (modified_goal, desc) = match average.get_or_insert(false) {
+    let (divisor, desc) = match average.get_or_insert(false) {
             true => {
-                ((goal as f64 * 0.889).ceil() as i32, String::from("If we go by the (pseudo) average, in which you get ~4.5 Hero's Wit per blossom, "))
+                (4.5, String::from("If we go by the (pseudo) average, in which you get ~4.5 Hero's Wit per blossom, "))
             },
-            false => (goal, String::from("Assuming the worst case scenario, in which you only get 4 Hero's Wit per blossom, ")),
+            false => (4.0, String::from("Assuming the worst case scenario, in which you only get 4 Hero's Wit per blossom, ")),
         };
-    let completion_times = (modified_goal as f64 / 4.0).ceil() as i32;
+    let completion_times = (goal as f64 / divisor).ceil() as i32;
     let resin = completion_times * 20;
     let mut embed = CreateEmbed::default();
     embed.title(format!("{resin} Resin"));
