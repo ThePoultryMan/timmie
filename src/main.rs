@@ -1,4 +1,5 @@
 use dotenv::dotenv;
+use rust_embed::RustEmbed;
 
 use std::env;
 
@@ -9,9 +10,14 @@ use commands::*;
 mod commands;
 mod embed_helper;
 
+pub struct Data;
+
+#[derive(RustEmbed)]
+#[folder = "src/resources/"]
+pub struct Resources;
+
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
-pub struct Data {}
 
 #[tokio::main]
 async fn main() {
@@ -19,7 +25,7 @@ async fn main() {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![register(), ping(), resin::resin()],
+            commands: vec![register(), ping(), resin::resin(), meta::meta()],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some("?".to_owned()),
                 ..Default::default()
