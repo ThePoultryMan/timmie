@@ -1,0 +1,15 @@
+{
+    "title": "Sources",
+    "fields": [
+        {
+            "name": "Hero's Wit Average",
+            "body": "Manual testing. (Will have recored later.)",
+            "inline": false
+        },
+        {
+            "name": "Artifact Distribution",
+            "body": "[Main Stat](https://genshin-impact.fandom.com/wiki/Artifact/Distribution#Main_Stat) (genshin-impact.fandom.com)",
+            "inline": false
+        }
+    ]
+}
