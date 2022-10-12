@@ -25,7 +25,13 @@ async fn main() {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![register(), ping(), resin::resin(), meta::meta()],
+            commands: vec![
+                register(),
+                ping(),
+                resin::resin(),
+                artifacts::artifacts(),
+                meta::meta(),
+            ],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some("?".to_owned()),
                 ..Default::default()

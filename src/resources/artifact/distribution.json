@@ -1,0 +1,20 @@
+{
+    "title": "Artifact Main Stat Distribution",
+    "fields": [
+        {
+            "name": "Sands of Eon",
+            "body": "HP%: 26.68%\nATK%: 26.66%\n DEF%: 26.66%\nEnergy Recharge%: 10%\nElemental Mastery: 10%",
+            "inline": false
+        },
+        {
+            "name": "Goblet of Eonothem",
+            "body": "Hp%: 19.175%\nATK%: 19.175%\n DEF%: 19.15%\nPyro DMG Bonus%: 5%\nElectro DMG Bouns%: 5%\nCryo DMG Bonus%: 5%\nHydro DMG Bonys%: 5%\nDendro DMG Bonus%: 5%\nAnemo DMG Bonus: 5%\nGeo DMG Bonus%: 5%\nPhysical DMG Bonus%: 5%\nElemental Mastery: 2.5%",
+            "inline": false
+        },
+        {
+            "name": "Circlet of Logos",
+            "body": "HP%: 22%\nATK%: 22%\nDEF%: 22%\nCRIT Rate%: 10%\nCRIT DMG%: 10%\nElemental Mastery: 4%",
+            "inline": false
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 use poise::serenity_prelude::CreateEmbed;
 use serde::{Deserialize, Serialize};
 
-use crate::Resources;
+use crate::{Context, Error, Resources};
 
 #[derive(Deserialize, Serialize)]
 pub struct Embed {
@@ -46,6 +46,17 @@ impl Embed {
         }
 
         embed
+    }
+
+    pub async fn send(self, ctx: Context<'_>) -> Result<(), Error> {
+        ctx.send(|r| {
+            r.embed(|e| {
+                *e = self.build();
+                e
+            })
+        })
+        .await?;
+        Ok(())
     }
 
     fn error_embed() -> Self {
