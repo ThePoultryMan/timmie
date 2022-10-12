@@ -3,7 +3,7 @@
     "fields": [
         {
             "name": "Hero's Wit (resin exp_wit [avg])",
-            "body": "When `average` is false, which it is by default, your goal is divided by four and then rounded up. This method assumes the worst case scenario.\nHowever, when average is true, your goal is divided by 4.5 (the pseudo average) which will return a more realistic result.",
+            "body": "When `average` is false, which it is by default, your goal is divided by four and then rounded up. This method assumes the worst case scenario.\nHowever, when `average` is true, your goal is divided by 4.5 (the pseudo average). This will return a more realistic result.",
             "inline": false
         }
     ]
