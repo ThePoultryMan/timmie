@@ -1,5 +1,6 @@
 use dotenv::dotenv;
 use rust_embed::RustEmbed;
+use serde::de::DeserializeOwned;
 
 use std::env;
 
@@ -16,8 +17,17 @@ pub struct Data;
 #[folder = "src/resources/"]
 pub struct Resources;
 
+#[derive(Debug)]
+pub struct ResourceError;
+
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
+
+impl ResourceError {
+    pub fn new() -> Self {
+        Self
+    }
+}
 
 #[tokio::main]
 async fn main() {
@@ -30,6 +40,7 @@ async fn main() {
                 ping(),
                 resin::resin(),
                 artifacts::artifacts(),
+                character::character(),
                 meta::meta(),
             ],
             prefix_options: poise::PrefixFrameworkOptions {
@@ -57,4 +68,22 @@ async fn register(ctx: Context<'_>) -> Result<(), Error> {
 async fn ping(ctx: Context<'_>) -> Result<(), Error> {
     ctx.say("ping!").await?;
     Ok(())
+}
+
+pub fn read_resource<'a, T>(file: &str) -> Result<T, ResourceError>
+where
+    T: DeserializeOwned,
+{
+    let file_str: String = match Resources::get(file) {
+        Some(file) => match std::str::from_utf8(&file.data) {
+            Ok(string) => string.to_owned(),
+            Err(_) => return Err(ResourceError::new()),
+        },
+        None => return Err(ResourceError::new()),
+    };
+
+    match serde_json::from_str(&file_str) {
+        Ok(embed) => Ok(embed),
+        Err(_) => Err(ResourceError::new()),
+    }
 }
