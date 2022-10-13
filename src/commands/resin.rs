@@ -7,6 +7,7 @@ pub async fn resin(_ctx: Context<'_>) -> Result<(), Error> {
     Ok(())
 }
 
+/// Calculate how much resin you need to get an inputted number of Hero's Wit.
 #[poise::command(slash_command, prefix_command)]
 pub async fn exp_wit(
     ctx: Context<'_>,

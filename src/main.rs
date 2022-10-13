@@ -64,9 +64,10 @@ async fn register(ctx: Context<'_>) -> Result<(), Error> {
     Ok(())
 }
 
+/// pong! Mostly used in testing.
 #[poise::command(slash_command, prefix_command)]
 async fn ping(ctx: Context<'_>) -> Result<(), Error> {
-    ctx.say("ping!").await?;
+    ctx.say("pong!").await?;
     Ok(())
 }
 

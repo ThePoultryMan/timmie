@@ -1,4 +1,4 @@
 {
     "title": "`goal` must be larger than `start`",
-    "description": "To do the calculations correctly, `goal` (you put %g) must be larger than `start` (you put %s)."
+    "description": "To do the calculations, `goal` (you put %g) must be larger than `start` (you put %s)."
 }
