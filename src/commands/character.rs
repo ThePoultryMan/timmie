@@ -1,3 +1,5 @@
+use std::vec;
+
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -29,6 +31,8 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
         Ok(exp_levels) => exp_levels,
         Err(_) => ExpLevel { total_exp: vec![0] },
     };
+
+    let mut level_embed = Embed::from_file("character/level.json");
     let exp_gap = match start {
         Some(level) => {
             if level > 90 {
@@ -45,11 +49,17 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
                 embed.send(ctx).await?;
                 return Ok(());
             }
+            level_embed.fill_placeholder("%l", &level, EmbedTextType::Description);
             exp_levels.total_exp[(goal - 1) as usize] - exp_levels.total_exp[(level - 1) as usize]
         }
-        None => exp_levels.total_exp[(goal - 1) as usize],
+        None => {
+            level_embed.fill_placeholder("%l", &0, EmbedTextType::Description);
+            exp_levels.total_exp[(goal - 1) as usize]
+        },
     };
-    ctx.say(format!("You are {exp_gap} EXP away from level {goal}!"))
-        .await?;
+
+    level_embed.fill_placeholders(vec!["%E", "%L"], vec![&exp_gap, &(goal as i32)], EmbedTextType::Title);
+    level_embed.fill_placeholders(vec!["%E", "%L"], vec![&exp_gap, &(goal as i32)], EmbedTextType::Description);
+    level_embed.send(ctx).await?;
     Ok(())
 }
