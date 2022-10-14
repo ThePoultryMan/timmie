@@ -17,6 +17,7 @@ pub struct Field {
     pub inline: bool,
 }
 
+#[derive(Clone, Copy)]
 pub enum EmbedTextType {
     Title,
     Description,
@@ -54,6 +55,17 @@ impl Embed {
             EmbedTextType::FieldName => todo!(),
             EmbedTextType::FieldBody => todo!(),
         };
+    }
+
+    pub fn fill_placeholders<S: ToString>(
+        &mut self,
+        placeholders: Vec<&str>,
+        text: Vec<&S>,
+        text_type: EmbedTextType,
+    ) {
+        for (placeholder, text) in placeholders.iter().zip(text) {
+            self.fill_placeholder(placeholder, text, text_type);
+        }
     }
 
     pub fn build(self) -> CreateEmbed {

@@ -22,7 +22,7 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
     if goal > 90 {
         limit_embed.fill_placeholder("%L", &goal, EmbedTextType::Description);
         limit_embed.send(ctx).await?;
-        return Ok(())
+        return Ok(());
     }
 
     let exp_levels = match crate::read_resource("character/exp_level.json") {
@@ -34,13 +34,16 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
             if level > 90 {
                 limit_embed.fill_placeholder("%L", &level, EmbedTextType::Description);
                 limit_embed.send(ctx).await?;
-                return Ok(())
+                return Ok(());
             } else if level > goal {
                 let mut embed = Embed::from_file("character/start_over_goal.json");
-                embed.fill_placeholder("%g", &goal, EmbedTextType::Description);
-                embed.fill_placeholder("%s", &level, EmbedTextType::Description);
+                embed.fill_placeholders(
+                    vec!["%g", "%s"],
+                    vec![&goal, &level],
+                    EmbedTextType::Description,
+                );
                 embed.send(ctx).await?;
-                return Ok(())
+                return Ok(());
             }
             exp_levels.total_exp[(goal - 1) as usize] - exp_levels.total_exp[(level - 1) as usize]
         }
