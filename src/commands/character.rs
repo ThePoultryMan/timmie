@@ -18,12 +18,9 @@ pub async fn character(_ctx: Context<'_>) -> Result<(), Error> {
 /// Tells you how many Hero's Wit, EXP, and Resin you need to get to your goal level, (from 0 or start).
 #[poise::command(slash_command, prefix_command)]
 pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<(), Error> {
-    let mut limit_embed = match crate::read_resource::<Embed>("character/level_limit.json") {
-        Ok(embed) => embed,
-        Err(err) => panic!("{:?}", err), // TODO: Add proper panicing
-    };
+    let mut limit_embed = Embed::from_file("character/level_limit.json");
     if goal > 90 {
-        limit_embed.replace_text("%L", &goal, EmbedTextType::Description);
+        limit_embed.fill_placeholder("%L", &goal, EmbedTextType::Description);
         limit_embed.send(ctx).await?;
         return Ok(())
     }
@@ -35,18 +32,14 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
     let exp_gap = match start {
         Some(level) => {
             if level > 90 {
-                limit_embed.replace_text("%L", &level, EmbedTextType::Description);
+                limit_embed.fill_placeholder("%L", &level, EmbedTextType::Description);
                 limit_embed.send(ctx).await?;
                 return Ok(())
             } else if level > goal {
-                match crate::read_resource::<Embed>("character/start_over_goal.json") {
-                    Ok(mut embed) => {
-                        embed.replace_text("%g", &goal, EmbedTextType::Description);
-                        embed.replace_text("%s", &level, EmbedTextType::Description);
-                        embed.send(ctx).await?;
-                    },
-                    Err(err) => panic!("{:?}", err), // TODO: Add proper panicing
-                };
+                let mut embed = Embed::from_file("character/start_over_goal.json");
+                embed.fill_placeholder("%g", &goal, EmbedTextType::Description);
+                embed.fill_placeholder("%s", &level, EmbedTextType::Description);
+                embed.send(ctx).await?;
                 return Ok(())
             }
             exp_levels.total_exp[(goal - 1) as usize] - exp_levels.total_exp[(level - 1) as usize]

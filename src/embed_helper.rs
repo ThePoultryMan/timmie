@@ -36,7 +36,7 @@ impl Embed {
         }
     }
 
-    pub fn replace_text<S: ToString>(
+    pub fn fill_placeholder<S: ToString>(
         &mut self,
         placeholder: &str,
         text: &S,
