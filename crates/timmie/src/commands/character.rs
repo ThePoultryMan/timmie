@@ -55,11 +55,19 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
         None => {
             level_embed.fill_placeholder("%l", &0, EmbedTextType::Description);
             exp_levels.total_exp[(goal - 1) as usize]
-        },
+        }
     };
 
-    level_embed.fill_placeholders(vec!["%E", "%L"], vec![&exp_gap, &(goal as i32)], EmbedTextType::Title);
-    level_embed.fill_placeholders(vec!["%E", "%L"], vec![&exp_gap, &(goal as i32)], EmbedTextType::Description);
+    level_embed.fill_placeholders(
+        vec!["%E", "%L"],
+        vec![&exp_gap, &(goal as i32)],
+        EmbedTextType::Title,
+    );
+    level_embed.fill_placeholders(
+        vec!["%E", "%L"],
+        vec![&exp_gap, &(goal as i32)],
+        EmbedTextType::Description,
+    );
     level_embed.send(ctx).await?;
     Ok(())
 }

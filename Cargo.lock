@@ -1214,6 +1214,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "ushi",
 ]
 
 [[package]]
@@ -1416,6 +1417,10 @@ dependencies = [
  "percent-encoding",
  "serde",
 ]
+
+[[package]]
+name = "ushi"
+version = "0.1.0"
 
 [[package]]
 name = "utf-8"
