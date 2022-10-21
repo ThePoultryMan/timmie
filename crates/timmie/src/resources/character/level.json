@@ -1,4 +1,16 @@
 {
     "title": "You are %E EXP away from Level %L",
-    "description": "If you start at Level %l you will need %E EXP to get to Level %L."
+    "description": "If you start at Level %l you will need %E EXP to get to Level %L.\nResources (assuming you have no Hero's Wit):",
+    "fields": [
+        {
+            "name": "Resin:",
+            "body": "%R",
+            "inline": true
+        },
+        {
+            "name": "Hero's Wit:",
+            "body": "%W",
+            "inline": true
+        }
+    ]
 }

@@ -68,6 +68,13 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
         vec![&exp_gap, &(goal as i32)],
         EmbedTextType::Description,
     );
+    let wit_goal = (exp_gap as f32 / 20000.0).ceil() as i32;
+    level_embed.fill_placeholder(
+        "%R",
+        &ushi::resin::get_exp_wit_resin(wit_goal, true),
+        EmbedTextType::FieldBody(0),
+    );
+    level_embed.fill_placeholder("%W", &wit_goal, EmbedTextType::FieldBody(1));
     level_embed.send(ctx).await?;
     Ok(())
 }

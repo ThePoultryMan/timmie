@@ -10,7 +10,7 @@ pub struct Embed {
     fields: Option<Vec<Field>>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Field {
     pub name: String,
     pub body: String,
@@ -21,8 +21,8 @@ pub struct Field {
 pub enum EmbedTextType {
     Title,
     Description,
-    FieldName,
-    FieldBody,
+    FieldName(usize),
+    FieldBody(usize),
 }
 
 pub enum Colors {
@@ -52,8 +52,13 @@ impl Embed {
                     self.description = Some(desc.replace(placeholder, &text.to_string()));
                 };
             }
-            EmbedTextType::FieldName => todo!(),
-            EmbedTextType::FieldBody => todo!(),
+            EmbedTextType::FieldName(_index) => todo!(),
+            EmbedTextType::FieldBody(index) => {
+                if let Some(mut fields) = self.fields.clone() {
+                    fields[index].body = fields[index].body.replace(placeholder, &text.to_string());
+                    self.fields = Some(fields);
+                }
+            }
         };
     }
 
