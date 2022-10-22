@@ -3,7 +3,7 @@ use std::vec;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    embed_helper::{Embed, EmbedTextType},
+    embed_helper::{self, Embed, EmbedTextType},
     Context, Error,
 };
 use ushi::database::character::{Character, CharacterInfo};
@@ -88,11 +88,32 @@ pub async fn info(
     let info = match CharacterInfo::get(&ushi::make_kabab_case(&character)).await {
         Ok(info) => info,
         Err(_) => {
-            ctx.say(format!("The character that you entered, {}, does not seem to exist.", character)).await?;
-            return Ok(())
-        },
+            ctx.say(format!(
+                "The character that you entered, {}, does not seem to exist.",
+                character
+            ))
+            .await?;
+            return Ok(());
+        }
     };
 
+    let mut embed = embed_helper::Embed::from_file("character/info.json");
+    embed.fill_placeholders(
+        vec!["%N", "%T"],
+        vec![&info.get_name(), &info.get_title().as_str()],
+        EmbedTextType::Title,
+    );
+    embed.fill_placeholders(
+        vec!["%R", "%V", "%W"],
+        vec![
+            &info.get_rarity().to_string().as_str(),
+            &info.get_vision(),
+            &info.get_weapon(),
+        ],
+        EmbedTextType::Description,
+    );
+
+    embed.send(ctx).await?;
     Ok(())
 }
 

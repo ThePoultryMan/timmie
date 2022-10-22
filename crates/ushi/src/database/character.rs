@@ -6,6 +6,14 @@ use super::api;
 #[derive(Deserialize)]
 pub struct CharacterInfo {
     name: String,
+    title: Option<String>,
+    vision: String, // Could be an enum later, for utility.
+    weapon: String, // Could be an enum later, again, for utitliy.
+    nation: String, // Could be an enum later, again, for utitliy.
+    affiliation: String,
+    rarity: u8,
+    constellation: String,
+    birthday: Option<String>,
 }
 
 #[derive(EnumIter, Display)]
@@ -13,6 +21,7 @@ pub enum Character {
     Albedo,
     Aloy,
     Amber,
+    #[strum(serialize = "Arataki Itto")]
     AratakiItto,
     Ayaka,
     Ayato,
@@ -34,6 +43,7 @@ pub enum Character {
     Keqing,
     Klee,
     Kokomi,
+    #[strum(serialize = "Kuki Shinobu")]
     KukiShinobu,
     Lisa,
     Mona,
@@ -46,23 +56,30 @@ pub enum Character {
     Sara,
     Sayu,
     Shenhe,
+    #[strum(serialize = "Shikanoin Heizou")]
     ShikanoinHeizou,
     Sucrose,
     Tartaglia,
     Thoma,
     Tighnari,
+    #[strum(serialize = "Traveler - Anemo")]
     TravelerAnemo,
+    #[strum(serialize = "Traveler - Dendro")]
     TravelerDendro,
+    #[strum(serialize = "Traveler - Electro")]
     TravelerElectro,
+    #[strum(serialize = "Traveler - Geo")]
     TravelerGeo,
     Venti,
     Xiangling,
     Xiao,
     Xingqui,
+    #[strum(serialize = "Yae Miko")]
     YaeMiko,
     Yanfei,
     Yelan,
     Yoimiya,
+    #[strum(serialize = "Yun Jin")]
     YunJin,
     Zhongli,
 }
@@ -71,6 +88,29 @@ impl CharacterInfo {
     pub async fn get(name: &str) -> Result<CharacterInfo, reqwest::Error> {
         let info = api::get_character_info(name).await?;
         Ok(info)
+    }
+
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn get_title(&self) -> String {
+        match &self.title {
+            Some(title) if !title.is_empty() => format!("\"{}\"", title),
+            _ => String::new(),
+        }
+    }
+
+    pub fn get_vision(&self) -> &str {
+        &self.vision
+    }
+
+    pub fn get_weapon(&self) -> &str {
+        &self.weapon
+    }
+
+    pub fn get_rarity(&self) -> u8 {
+        self.rarity
     }
 }
 
