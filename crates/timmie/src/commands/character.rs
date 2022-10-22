@@ -6,13 +6,14 @@ use crate::{
     embed_helper::{Embed, EmbedTextType},
     Context, Error,
 };
+use ushi::database::character::{Character, CharacterInfo};
 
 #[derive(Deserialize, Serialize)]
 struct ExpLevel {
     total_exp: Vec<i32>,
 }
 
-#[poise::command(slash_command, prefix_command, subcommands("level"))]
+#[poise::command(slash_command, prefix_command, subcommands("level", "info"))]
 pub async fn character(_ctx: Context<'_>) -> Result<(), Error> {
     Ok(())
 }
@@ -77,4 +78,24 @@ pub async fn level(ctx: Context<'_>, goal: u32, start: Option<u32>) -> Result<()
     level_embed.fill_placeholder("%W", &wit_goal, EmbedTextType::FieldBody(1));
     level_embed.send(ctx).await?;
     Ok(())
+}
+
+#[poise::command(slash_command, prefix_command)]
+pub async fn info(
+    ctx: Context<'_>,
+    #[autocomplete = "autocomplete_character"] character: String,
+) -> Result<(), Error> {
+    let info = match CharacterInfo::get(&ushi::make_kabab_case(&character)).await {
+        Ok(info) => info,
+        Err(_) => {
+            ctx.say(format!("The character that you entered, {}, does not seem to exist.", character)).await?;
+            return Ok(())
+        },
+    };
+
+    Ok(())
+}
+
+async fn autocomplete_character(_ctx: Context<'_>, partial: &str) -> Vec<String> {
+    Character::starts_with(partial)
 }
