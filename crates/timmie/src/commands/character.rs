@@ -104,11 +104,12 @@ pub async fn info(
         EmbedTextType::Title,
     );
     embed.fill_placeholders(
-        vec!["%R", "%V", "%W"],
+        vec!["%R", "%V", "%W", "%D"],
         vec![
             &info.get_rarity().to_string().as_str(),
             &info.get_vision(),
             &info.get_weapon(),
+            &info.get_description(),
         ],
         EmbedTextType::Description,
     );

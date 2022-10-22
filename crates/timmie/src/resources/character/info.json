@@ -1,4 +1,4 @@
 {
     "title": "%N %T",
-    "description": "**Rarity:** %R★\n**Vision:** %V\n**Weapon:** %W"
+    "description": "_%D_\n\n**Rarity:** %R★\n**Vision:** %V\n**Weapon:** %W"
 }

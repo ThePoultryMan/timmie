@@ -14,6 +14,7 @@ pub struct CharacterInfo {
     rarity: u8,
     constellation: String,
     birthday: Option<String>,
+    description: String,
 }
 
 #[derive(EnumIter, Display)]
@@ -111,6 +112,10 @@ impl CharacterInfo {
 
     pub fn get_rarity(&self) -> u8 {
         self.rarity
+    }
+
+    pub fn get_description(&self) -> &str {
+        &self.description
     }
 }
 
